@@ -37,7 +37,7 @@ The Strategic Lifecycle of SecureCheck Pro is designed for continuous upgradabil
 **SecureCheck Pro** is the intellectual and creative property of **Arisudan**.
 - **Founding Architect**: Arisudan
 - **Lead Developer**: Arisudan
-- **Royalties & Copyright**: All rights, royalties, and ownership of the SecureCheck Pro brand, its heuristic models, and its boutique design tokens are $100\%$ owned by **Arisudan**.
+- **Royalties & Copyright**: All rights, royalties, and ownership of the SecureCheck Pro brand, its heuristic models, and its boutique design tokens are $100 %$ owned by **Arisudan**.
 - **Authenticity**: Any deployment or distribution of this software must acknowledge the original authorship and ownership of Arisudan.
 
 ---
