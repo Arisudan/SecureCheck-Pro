@@ -142,7 +142,11 @@ h2.section-hero {
     padding: 2.5rem; position: relative; color: var(--text-strong);
 }
 
-.choice-tile-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+.choice-tile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
 
 .field-note {
     background: #fffbe6; color: #422006; padding: 2rem; border-radius: 12px;
@@ -838,4 +842,101 @@ html.light-mode .switch-bullet { transform: translateX(32px); background: #000; 
     cursor: help;
     text-decoration: underline dotted var(--accent);
     text-underline-offset: 4px;
+}
+/* Professional Forensic HUD (SVG Edition) */
+.forensic-hud-timer {
+    width: 110px;
+    height: 110px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    user-select: none;
+}
+
+.hud-svg {
+    transform: rotate(-90deg);
+    overflow: visible;
+}
+
+.hud-base-ring {
+    stroke: var(--border);
+    stroke-width: 4;
+    fill: none;
+    opacity: 0.3;
+}
+
+.hud-active-trace {
+    stroke: var(--accent);
+    stroke-width: 5;
+    fill: none;
+    stroke-dasharray: 283; /* 2 * PI * 45 */
+    stroke-dashoffset: 283;
+    transition: stroke-dashoffset 1s linear, stroke 0.4s;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 5px var(--accent));
+}
+
+.hud-value {
+    position: absolute;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 950;
+    color: var(--text-strong);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
+
+.hud-pulse {
+    position: absolute;
+    inset: -5px;
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Light Mode Overrides */
+html.light-mode .hud-base-ring { stroke: #eee; opacity: 1; }
+html.light-mode .hud-value { color: #000; }
+
+/* Boutique Toast Notifications */
+.toast {
+    padding: 16px 26px;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-weight: 800;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    border: 1.5px solid var(--border);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    animation: toastIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+    color: var(--text-strong);
+    background: var(--surface-2);
+    min-width: 250px;
+}
+
+.toast.safe { border-color: var(--safe); background: rgba(16, 185, 129, 0.08); color: var(--safe); }
+.toast.warn { border-color: var(--warn); background: rgba(245, 158, 11, 0.08); color: var(--warn); }
+.toast.risky { border-color: var(--risky); background: rgba(244, 63, 94, 0.08); color: var(--risky); }
+
+.toast svg { margin-right: 14px; flex-shrink:0; }
+
+@keyframes toastIn {
+    from { opacity: 0; transform: translateX(30px) scale(0.9); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+html.light-mode .toast {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    color: #444;
 }

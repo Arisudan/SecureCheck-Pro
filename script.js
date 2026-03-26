@@ -226,25 +226,34 @@
             STATE.quizTimeLeft = this.difficultyTimers[q.difficulty] || 15;
             
             dom.quizContainer.innerHTML = `
-                 <div style="background:var(--surface-1); border-bottom:2px solid var(--border); padding:1.5rem 2.5rem; display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <h4 style="font-family:var(--font-mono); font-size:0.7rem; color:var(--accent); letter-spacing:1px; font-weight:900; margin-bottom:5px; text-transform:uppercase;">Intelligent Audit Simulation</h4>
-                        <h3 style="font-size:1.4rem; font-weight:950; letter-spacing:-1px; color:var(--text-strong);">Scenario Site 0${STATE.quizCurrent + 1}</h3>
-                    </div>
-                    <div style="display:flex; gap:3rem; align-items:center;">
-                        <div style="text-align:right;">
-                            <small style="font-weight:950; color:var(--text-dim); text-transform:uppercase; font-size:0.6rem; letter-spacing:1.5px; display:block;">Threat Level</small>
-                            <span style="font-family:var(--font-mono); font-size:1.1rem; font-weight:950; color:var(--accent); text-transform:uppercase;">${q.difficulty}</span>
-                        </div>
-                        <div style="text-align:right;">
-                            <small style="font-weight:950; color:var(--text-dim); text-transform:uppercase; font-size:0.6rem; letter-spacing:1.5px; display:block;">Operational Timer</small>
-                            <span id="quiz-timer" style="font-family:var(--font-mono); font-size:1.4rem; font-weight:950; color:var(--risky);">${STATE.quizTimeLeft}s</span>
-                        </div>
-                        <div style="text-align:right;">
-                            <small style="font-weight:900; color:var(--text-dim); text-transform:uppercase; font-size:0.6rem; letter-spacing:1px; display:block;">Vault Sync</small>
-                            <div style="width:100px; height:6px; background:var(--surface-0); border-radius:10px; margin-top:6px; overflow:hidden; border:1px solid var(--border);">
+                 <div style="background:var(--surface-1); border-bottom:2px solid var(--border); padding:1rem 2.5rem; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; z-index:100; backdrop-filter:blur(20px);">
+                    <div style="flex:1;">
+                        <h3 style="font-size:1.6rem; font-weight:950; letter-spacing:-1px; color:var(--text-strong);">Question ${STATE.quizCurrent + 1}</h3>
+                        <div style="margin-top:1rem;">
+                            <small style="font-weight:950; color:var(--text-dim); text-transform:uppercase; font-size:0.6rem; letter-spacing:1.5px; display:block;">Progress Matrix</small>
+                            <div style="width:200px; height:8px; background:var(--surface-0); border-radius:10px; margin-top:8px; overflow:hidden; border:1px solid var(--border);">
                                 <div style="width:${(STATE.quizCurrent+1)/STATE.quizQuestions.length*100}%; height:100%; background:var(--accent); transition:0.4s cubic-bezier(0.2, 1, 0.2, 1);"></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:0.5rem; margin: 0 4rem;">
+                        <div class="forensic-hud-timer" id="tactical-clock" style="width:110px; height:110px; background:transparent;">
+                            <svg class="hud-svg" width="100" height="100" style="overflow:visible;">
+                                <circle class="hud-base-ring" cx="50" cy="50" r="45"></circle>
+                                <circle id="hud-trace" class="hud-active-trace" cx="50" cy="50" r="45"></circle>
+                            </svg>
+                            <div class="hud-value">
+                                <span id="quiz-timer">${STATE.quizTimeLeft}</span>
+                                <small style="font-size:0.5rem; opacity:0.6; margin-top:2px;">SEC</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="flex:1; text-align:right; display:flex; flex-direction:column; gap:1.5rem;">
+                        <div>
+                            <small style="font-weight:950; color:var(--text-dim); text-transform:uppercase; font-size:0.6rem; letter-spacing:1.5px; display:block;">Threat Signature</small>
+                            <span style="font-family:var(--font-mono); font-size:1.2rem; font-weight:950; color:var(--risky); text-transform:uppercase;">Level: ${q.difficulty.toUpperCase()}</span>
                         </div>
                     </div>
                  </div>
@@ -258,11 +267,8 @@
                      
                      <div class="choice-tile-grid">
                          ${q.options.map((opt, i) => `
-                            <button class="quiz-option tile" onclick="Quiz.select(${i})" style="height: auto; padding: 1rem 1.75rem;">
-                                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-                                    <span style="font-size:0.9rem; font-weight:900;">${opt}</span>
-                                    <small style="font-family:var(--font-mono); font-size:0.6rem; color:var(--accent); font-weight:950; opacity:0.6;">NODE-${i+1}</small>
-                                </div>
+                            <button class="quiz-option tile" onclick="Quiz.select(${i})" style="height: auto; padding: 1.5rem; text-align: center; justify-content: center;">
+                                <span style="font-size:1.0rem; font-weight:900; width: 100%; display: block;">${opt}</span>
                             </button>
                          `).join('')}
                      </div>
@@ -274,11 +280,35 @@
         },
         startTimer() {
             if (STATE.quizInt) clearInterval(STATE.quizInt);
-            // Timer set in render() for synchronization
             const timerEl = document.getElementById('quiz-timer');
+            const traceEl = document.getElementById('hud-trace');
+            const max = this.difficultyTimers[STATE.quizQuestions[STATE.quizCurrent].difficulty] || 15;
+            
+            const updateUI = () => {
+                const offset = (1 - (STATE.quizTimeLeft / max)) * 283;
+                if (traceEl) traceEl.style.strokeDashoffset = offset;
+                if (timerEl) timerEl.textContent = STATE.quizTimeLeft;
+                
+                const color = STATE.quizTimeLeft <= 3 ? 'var(--risky)' : 'var(--accent)';
+                if (traceEl) {
+                    traceEl.style.stroke = color;
+                    traceEl.style.filter = `drop-shadow(0 0 8px ${color})`;
+                }
+                if (timerEl) timerEl.style.color = color;
+            };
+
+            // Force immediate reset of ring
+            if (traceEl) {
+                traceEl.style.transition = 'none';
+                traceEl.style.strokeDashoffset = '0';
+                setTimeout(() => traceEl.style.transition = 'stroke-dashoffset 1s linear, stroke 0.4s', 50);
+            }
+
+            updateUI();
+            
             STATE.quizInt = setInterval(() => {
                 STATE.quizTimeLeft--;
-                if (timerEl) timerEl.textContent = `${STATE.quizTimeLeft}s`;
+                updateUI();
                 if (STATE.quizTimeLeft <= 0) {
                     clearInterval(STATE.quizInt);
                     this.select(-1);
@@ -300,15 +330,13 @@
                 if (idx !== -1 && i === idx && i !== q.correctIndex) { b.style.borderColor = 'var(--risky)'; b.style.background = 'rgba(244, 63, 94, 0.08)'; b.querySelector('span').style.color = 'var(--risky)'; }
             });
 
-            if (isCorrect) { STATE.quizScore += 10; Toast.show("Operational Logic Verified", "safe"); }
+            if (isCorrect) { STATE.quizScore += 10; Toast.show("Correct", "safe"); }
             else if (idx === -1) { Toast.show("Response Time Out", "risky"); }
-            else Toast.show("Discrepancy Found", "risky");
+            else Toast.show("Incorrect", "risky");
 
             feedback.innerHTML = `
-                <div class="field-note" style="padding:1.25rem 1.75rem; margin-top:1.5rem;">
-                    <h4 style="margin-bottom:0.75rem; font-size:0.75rem; font-weight:950; text-transform:uppercase; letter-spacing:1.5px;">Forensic Feedback ${idx === -1 ? '(TIME OUT)' : ''}</h4>
-                    <p style="font-size:0.9rem; line-height:1.6; font-weight:700;">${q.explanation}</p>
-                    <button class="action-btn" style="margin-top:1.25rem; width:100%; padding:12px; font-size:0.85rem;" onclick="Quiz.next()">Next Scenario &rarr;</button>
+                <div class="field-note" style="padding:1.25rem; margin-top:2rem; text-align:center; background:var(--surface-1); border:1.5px solid var(--border);">
+                    <button class="action-btn" style="width:fit-content; padding:12px 60px; font-size:1.1rem; font-weight:950; letter-spacing:1px;" onclick="Quiz.next()">Next Question &rarr;</button>
                 </div>
             `;
             feedback.classList.remove('hidden');
@@ -365,12 +393,51 @@
 
                     <div class="seal-verified">OFFICIAL VERIFIED SEAL</div>
                     
-                    <div style="display:flex; gap:1.5rem;">
-                        <button class="action-btn" style="flex:2.5; background:#000;" onclick="Quiz.start()">Return to Field Nodes</button>
-                        <button class="action-btn" style="flex:1; background:transparent; color:#000; border:3.5px solid #000;" onclick="window.print()">Print Documentation</button>
+                    <div style="display:flex; flex-direction:column; gap:1.25rem;">
+                        <div style="display:flex; gap:1.5rem;">
+                            <button class="action-btn" style="flex:2.5; background:#000;" onclick="Quiz.start()">Restart Quiz</button>
+                            <button class="action-btn" style="flex:1; background:transparent; color:#000; border:3.5px solid #000;" onclick="window.print()">Print Certificate</button>
+                        </div>
+                        <button class="action-btn" style="width:100%; background:var(--accent); color:#fff; border:none; padding:1.5rem; font-size:1rem;" onclick="Quiz.showResults()">View Quiz Results</button>
                     </div>
                 </div>
             `;
+        },
+        showResults() {
+            dom.quizContainer.innerHTML = `
+                <div class="bento-card" style="padding:3rem; background:var(--surface-0); border:2.5px solid var(--border);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:3rem; border-bottom:1.5px solid var(--border); padding-bottom:1.5rem;">
+                        <h2 style="font-family:'Syne', sans-serif; font-size:2rem; font-weight:950; color:var(--text-strong); letter-spacing:-1px;">Quiz Results</h2>
+                        <button class="action-btn" style="padding:10px 30px; font-size:0.8rem;" onclick="Quiz.finish()">Back to Certificate</button>
+                    </div>
+                    
+                    <div style="display:flex; flex-direction:column; gap:2.5rem;">
+                        ${STATE.quizResults.map((r, i) => {
+                            const q = STATE.quizQuestions[i];
+                            return `
+                                <div style="padding:2.5rem; border:2px solid var(--border); border-radius:24px; background:var(--surface-1); position:relative; overflow:hidden;">
+                                    <div style="position:absolute; top:1.5rem; right:1.5rem; font-family:var(--font-mono); font-size:0.7rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:2px;">Node: 0${i + 1}</div>
+                                    <h4 style="font-size:1.15rem; color:var(--text-strong); margin-bottom:1.5rem; font-weight:950; line-height:1.4;">${r.question}</h4>
+                                    
+                                    <div style="background:var(--bg); border:1.5px solid var(--safe); padding:1.5rem; border-radius:18px; margin-bottom:1rem;">
+                                        <small style="color:var(--safe); font-family:var(--font-mono); font-size:0.6rem; text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:8px;">Authenticated Correct Answer</small>
+                                        <div style="font-size:1rem; font-weight:950; color:var(--text-strong);">${q.options[q.correctIndex]}</div>
+                                    </div>
+
+                                    <div style="padding:1rem 1.5rem; border-left:4px solid var(--accent); background:rgba(59, 130, 246, 0.05); border-radius:4px;">
+                                        <p style="font-size:0.85rem; line-height:1.6; color:var(--text-main); font-weight:700; font-style:italic;">"${r.explanation}"</p>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+
+                    <div style="margin-top:4rem; text-align:center;">
+                        <button class="action-btn" style="padding:20px 80px; font-size:1.2rem;" onclick="Quiz.start()">Re-initialize Simulation Grid</button>
+                    </div>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         },
         esc: s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
     };
@@ -497,7 +564,13 @@
             if (exSafe) exSafe.onclick = () => { dom.urlInput.value = "https://google.com"; this.analyze(); };
 
             document.getElementById('prev-page').onclick = () => { if (STATE.currentPage > 1) { STATE.currentPage--; this.renderHistory(); } };
-            document.getElementById('next-page').onclick = () => { STATE.currentPage++; this.renderHistory(); };
+            document.getElementById('next-page').onclick = async () => { 
+                const all = await DB.getAll();
+                const filtered = all.filter(s => s.inputValue.toLowerCase().includes(STATE.searchQuery));
+                const maxPage = Math.ceil(filtered.length / STATE.itemsPerPage) || 1;
+                if (STATE.currentPage < maxPage) { STATE.currentPage++; this.renderHistory(); } 
+                else Toast.show("EOL: No further records found", "warn");
+            };
         },
         updateOnlineStatus() {
             const banner = document.getElementById('offline-banner');
@@ -571,12 +644,14 @@
                 </div>
             `;
             const mean = all.length ? Math.round(all.reduce((a, b) => a + b.score, 0) / all.length) : 0;
-            dom.statAvg.innerHTML = `<span style="display:inline-flex; align-items:baseline; gap:5px; font-weight:950; color:var(--accent); font-size:4.5rem; letter-spacing:-4px;">${mean}<small style="font-size:1.5rem; opacity:0.5;">%</small></span>`;
+            dom.statAvg.innerHTML = `<span style="display:inline-flex; align-items:baseline; gap:5px; font-weight:950; color:var(--accent); font-size:7rem; letter-spacing:-6px;">${mean}<small style="font-size:2rem; opacity:0.5;">%</small></span>`;
             
+            if (dom.pageInfo) dom.pageInfo.textContent = `PAGE ${STATE.currentPage}`;
+
             // Update the new tactical stats
             const statTotalLabel = document.getElementById('intel-stat-total');
             const statAvgLabel = document.getElementById('intel-stat-avg');
-            if (statTotalLabel) statTotalLabel.textContent = all.length;
+            if (statTotalLabel) statTotalLabel.textContent = filtered.length;
             if (statAvgLabel) statAvgLabel.textContent = `${mean}%`;
 
             this.renderVaultCharts(all);
@@ -612,7 +687,15 @@
             `;
         },
         // Efficiency & Traffic Resilience: Uses Background Workers and Optimized DOM Batching
-        updateCounter() { DB.getAll().then(all => { requestAnimationFrame(() => { if (dom.statTotal) dom.statTotal.textContent = all.length; }); }); }
+        updateCounter() { 
+            DB.getAll().then(all => { 
+                requestAnimationFrame(() => { 
+                    if (dom.statTotal) dom.statTotal.textContent = all.length;
+                    const historyCounter = document.getElementById('scan-counter-big-history');
+                    if (historyCounter) historyCounter.textContent = all.length;
+                }); 
+            }); 
+        }
     };
 
     const UI = {
@@ -862,10 +945,12 @@
                 `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="margin-right:12px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>`;
             
             e.innerHTML = `${icon}<span>${m}</span>`;
-            e.style.cssText = `background:#fff; color:#000; border:2.5px solid ${color}; padding:14px 22px; border-radius:14px; margin-bottom:1.5rem; font-weight:900; text-transform:uppercase; font-size:0.75rem; letter-spacing:1px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); display:flex; align-items:center; animation: toastIn 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);`;
-            
             dom.toastContainer.appendChild(e);
-            setTimeout(() => { e.style.opacity = '0'; e.style.transform = 'translateY(10px)'; setTimeout(() => e.remove(), 400); }, 3500);
+            setTimeout(() => { 
+                e.style.opacity = '0'; 
+                e.style.transform = 'translateY(10px)'; 
+                setTimeout(() => e.remove(), 400); 
+            }, 3500);
         }
     };
 
