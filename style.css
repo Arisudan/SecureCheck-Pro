@@ -92,6 +92,8 @@ body {
 .span-3 { grid-column: span 3; }
 .span-8 { grid-column: span 8; }
 .span-12 { grid-column: span 12; }
+.hidden { display: none !important; }
+
 
 /* --- Navigation & Header --- */
 .app-header {
@@ -116,8 +118,8 @@ body {
 
 /* --- Component Refinement --- */
 h2.section-hero {
-    font-size: 4rem; font-weight: 900; letter-spacing: -4px; line-height: 0.85;
-    margin-bottom: 3.5rem; color: var(--text-strong); text-transform: uppercase;
+    font-size: 2.0rem; font-weight: 950; letter-spacing: -2px; line-height: 1;
+    margin-bottom: 2.5rem; color: var(--text-strong); text-transform: uppercase;
 }
 
 .input-area input, .input-area textarea {
@@ -498,4 +500,293 @@ html.light-mode .switch-bullet { transform: translateX(32px); background: #000; 
 .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__clouds { bottom: -4.062em; }
 .theme-switch__checkbox:checked + .theme-switch__container .theme-switch__stars-container {
   top: 50%; transform: translateY(-50%);
+}
+
+/* --- Boutique Tech-Stack Flip Mechanics --- */
+.tech-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+    perspective: 1000px;
+    height: 100%;
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 320px;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform-style: preserve-3d;
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 8px 14px 0 rgba(0,0,0,0.2);
+}
+
+.flip-card-front {
+  background: var(--surface-1);
+  background: linear-gradient(120deg, var(--surface-1) 60%, var(--surface-2) 88%,
+     var(--surface-0) 40%, rgba(59, 130, 246, 0.05) 48%);
+  color: var(--text-strong);
+}
+
+.flip-card-back {
+  background: var(--accent);
+  background: linear-gradient(120deg, var(--accent) 30%, #1e40af 88%,
+     var(--surface-0) 40%, #1d4ed8 78%);
+  color: white;
+  transform: rotateY(180deg);
+  border-color: var(--accent);
+}
+
+.flip-card-back h6 {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+.flip-card .title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 950;
+  text-align: center;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* --- Intelligence Distribution Card (Uiverse.io Inspired Port) --- */
+.intel-dist-card {
+    position: relative;
+    background: var(--surface-0);
+    border-radius: 24px;
+    padding: 2.5rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
+
+.intel-dist-card:hover {
+    transform: scale(1.01);
+    box-shadow: 0 20px 50px rgba(59, 130, 246, 0.1);
+}
+
+.intel-dist-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    background: linear-gradient(to right, var(--accent), #a855f7, #ec4899);
+    opacity: 0.15;
+    filter: blur(8px);
+    transition: opacity 0.3s;
+}
+
+.intel-dist-card:hover .intel-dist-glow {
+    opacity: 0.25;
+}
+
+.intel-stat-box {
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 16px;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+}
+
+.intel-chart-area {
+    height: 120px;
+    width: 100%;
+    background: rgba(17, 24, 39, 0.5);
+    border-radius: 16px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.intel-bar-wrap {
+    flex: 1;
+    height: 100%;
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+}
+
+.intel-bar-fill {
+    width: 100%;
+    border-radius: 4px;
+    background: var(--accent);
+    transition: height 0.3s;
+}
+.hib-back-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #fff;
+  font-weight: 500;
+  opacity: 0.95;
+  text-align: left;
+  margin: 0;
+}
+
+/* --- Strategic Roadmap Aesthetics --- */
+.roadmap-container {
+    position: relative;
+    padding-left: 5rem;
+    margin-top: 4rem;
+}
+
+.roadmap-line {
+    position: absolute;
+    left: 1.15rem;
+    top: 0;
+    bottom: 0;
+    width: 2.5px;
+    background: linear-gradient(180deg, var(--safe) 0%, var(--safe) 45%, var(--accent) 55%, var(--text-dim) 100%);
+    opacity: 0.2;
+}
+
+.roadmap-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+    padding: 2.2rem 3rem;
+    background: rgba(17, 24, 39, 0.4);
+    border: 1.5px solid var(--border);
+    border-radius: 20.5px;
+    transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.roadmap-item.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.roadmap-item:hover {
+    transform: translateX(10px);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.roadmap-node {
+    position: absolute;
+    left: -3.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 3.5px solid var(--border);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.roadmap-node::after {
+    content: '';
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--border);
+}
+
+.roadmap-node.unlocked { border-color: var(--safe); box-shadow: 0 0 20px var(--safe); }
+.roadmap-node.unlocked::after { background: var(--safe); }
+
+.roadmap-node.active { border-color: var(--accent); box-shadow: 0 0 20px var(--accent); }
+.roadmap-node.active::after { background: var(--accent); }
+
+.roadmap-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 950;
+    color: var(--text-strong);
+}
+
+.roadmap-status {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.roadmap-obj {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 950;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+}
+
+/* --- Tech Stack Standard --- */
+.tech-card {
+    background: rgba(17, 24, 39, 0.45);
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: 0.4s cubic-bezier(0.2, 1, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+}
+
+.tech-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent);
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.tech-card h5 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 950;
+    color: var(--text-strong);
+    margin-bottom: 5px;
+}
+
+.tech-card .tech-status {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    font-weight: 950;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }

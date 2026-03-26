@@ -13,7 +13,7 @@
         quizScore: 0, quizStreak: 0, quizCurrent: 0, 
         quizTimeLeft: 15, quizInt: null,
         quizQuestions: [], quizResults: [],
-        worker: null, deferredPrompt: null,
+        worker: null, deferredPrompt: null, activeScan: null,
         vaultStats: { avg: 0, trend: 0, series: [] }
     };
 
@@ -449,7 +449,7 @@
             const hash = window.location.hash;
             if (hash.startsWith('#audit=')) {
                 try {
-                    const data = JSON.parse(atob(decodeURIComponent(hash.split('=')[1])));
+                    const data = JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(hash.split('=')[1])))));
                     setTimeout(() => { if (UI) UI.renderScan(data); Toast.show("INTEL HYDRATED FROM DEEP-LINK", "safe"); }, 500);
                 } catch(e) { console.error("Link corruption detected."); }
             }
@@ -513,6 +513,13 @@
             `;
             const mean = all.length ? Math.round(all.reduce((a, b) => a + b.score, 0) / all.length) : 0;
             dom.statAvg.innerHTML = `<span style="display:inline-flex; align-items:baseline; gap:5px; font-weight:950; color:var(--accent); font-size:4.5rem; letter-spacing:-4px;">${mean}<small style="font-size:1.5rem; opacity:0.5;">%</small></span>`;
+            
+            // Update the new tactical stats
+            const statTotalLabel = document.getElementById('intel-stat-total');
+            const statAvgLabel = document.getElementById('intel-stat-avg');
+            if (statTotalLabel) statTotalLabel.textContent = all.length;
+            if (statAvgLabel) statAvgLabel.textContent = `${mean}%`;
+
             this.renderVaultCharts(all);
         },
         renderVaultCharts(all) {
@@ -531,18 +538,15 @@
             container.innerHTML = `
                 <div style="position:absolute; inset:0; background:linear-gradient(180deg, transparent 60%, rgba(59,130,246,0.03) 100%); pointer-events:none;"></div>
                 <div style="position:absolute; inset:0; background-image: radial-gradient(var(--border) 1px, transparent 1px); background-size: 24px 24px; opacity:0.1; pointer-events:none;"></div>
-                <div style="position:absolute; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, var(--accent), transparent); opacity:0.2; animation: chartScan 3s ease-in-out infinite; pointer-events:none;"></div>
                 
                 ${last15.map((s, i) => `
-                    <div class="chart-bar-capsule" 
-                        style="width:20px; height:${Math.max(s.score, 10)}%; 
-                        background:linear-gradient(180deg, var(--${s.score > 70 ? 'safe' : (s.score > 40 ? 'warn' : 'risky')}) 0%, rgba(0,0,0,0.1) 100%); 
-                        border-radius:100px; 
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 10px rgba(255,255,255,0.05);
-                        opacity: 0.8; transition: all 0.4s cubic-bezier(0.2, 1, 0.2, 1);
-                        animation: barGrowth 1s cubic-bezier(0, 1.3, 0.3, 1) forwards;
-                        animation-delay: ${i * 0.04}s; transform: scaleY(0); transform-origin: bottom;" 
-                        title="Audit: ${s.inputPreview}... | Score: ${s.score}%">
+                    <div class="intel-bar-wrap" title="Audit: ${s.inputPreview}... | Score: ${s.score}%">
+                        <div class="intel-bar-fill" 
+                            style="height:${Math.max(s.score, 15)}%; 
+                            background: var(--${s.score > 70 ? 'safe' : (s.score > 40 ? 'warn' : 'risky')});
+                            animation: barGrowth 1s cubic-bezier(0, 1.3, 0.3, 1) forwards;
+                            animation-delay: ${i * 0.05}s;">
+                        </div>
                     </div>
                 `).join('') || `<div style="width:100%; text-align:center; opacity:0.1; font-family:'DM Mono'; font-weight:950; letter-spacing:2px; align-self:center;">NO_DATA_NODES</div>`}
                 <div style="position:absolute; bottom:0; left:0; right:0; height:1.5px; background:var(--border); opacity:0.3;"></div>
@@ -554,6 +558,7 @@
 
     const UI = {
         renderScan(res) {
+            STATE.activeScan = res;
             dom.results.innerHTML = `
                 <div class="bento-grid" style="margin-top:2.5rem;">
                     <div class="span-12">
@@ -597,8 +602,8 @@
                             </div>
                             
                             <div style="width:100%; margin-top:1.5rem; display:flex; gap:12px; position:relative; z-index:1;">
-                                <button onclick='UI.downloadReport(${JSON.stringify(res)})' class="action-btn" style="flex:1; padding:12px; font-size:0.65rem; background:var(--accent);">EXPORT PDF</button>
-                                <button onclick='UI.copyShareLink(${JSON.stringify(res)})' class="action-btn" style="flex:1; padding:12px; font-size:0.65rem; background:transparent; border:2px solid var(--border-bright);">SHARE INTEL</button>
+                                <button onclick='UI.downloadReport()' class="action-btn" style="flex:1; padding:12px; font-size:0.65rem; background:var(--accent);">EXPORT PDF</button>
+                                <button onclick='UI.copyShareLink()' class="action-btn" style="flex:1; padding:12px; font-size:0.65rem; background:transparent; border:2px solid var(--border-bright);">SHARE INTEL</button>
                             </div>
                         </div>
                     </div>
@@ -655,10 +660,13 @@
                 </div>
             `;
         },
-        copyShareLink(res) {
-            const data = btoa(JSON.stringify(res));
-            const url = `${window.location.origin}${window.location.pathname}#audit=${data}`;
-            navigator.clipboard.writeText(url).then(() => Toast.show("AUDIT LINK SECURED TO CLIPBOARD", "safe"));
+        copyShareLink() {
+            if (!STATE.activeScan) return;
+            try {
+                const data = btoa(unescape(encodeURIComponent(JSON.stringify(STATE.activeScan))));
+                const url = `${window.location.origin}${window.location.pathname}#audit=${encodeURIComponent(data)}`;
+                navigator.clipboard.writeText(url).then(() => Toast.show("AUDIT LINK SECURED TO CLIPBOARD", "safe"));
+            } catch(e) { Toast.show("CORRUPTION IN INTEL BUFFER", "risky"); }
         },
         renderForensicDossier(res) {
             const dossier = document.getElementById('forensic-dossier');
@@ -773,9 +781,10 @@
                 </div>
             `;
         },
-        downloadReport(res) {
+        downloadReport() {
+            if (!STATE.activeScan) return;
             Toast.show("GENERATING FORENSIC DOSSIER...", "warn");
-            this.renderForensicDossier(res);
+            this.renderForensicDossier(STATE.activeScan);
             setTimeout(() => {
                 window.print();
                 // Clear dossier after a delay so it doesn't vanish mid-print dialog on some browsers
