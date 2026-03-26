@@ -1,5 +1,5 @@
 # 🛡️ SecureCheck Pro v3.5.0
-### **High-Fidelity Website Security Analyzer // Operational Autonomy**
+### **High-Fidelity Website Security Analyzer | Operational Autonomy**
 
 **SecureCheck Pro** is an elite, client-side digital forensic suite designed to identify vulnerabilities and security anomalies in real-time. Engineered for high-stakes intelligence analysis, it transforms security auditing into a boutique, tactical experience, prioritizing **Total Data Autonomy**.
 

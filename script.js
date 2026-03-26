@@ -326,7 +326,7 @@
                 <div class="audit-certificate" style="padding:4rem; border-width:12px;">
                     <div style="border-bottom:2.5px solid #000; padding-bottom:3rem; margin-bottom:4rem; text-align:center;">
                         <h1 style="font-size:2.2rem; font-weight:950; text-transform:uppercase; letter-spacing:5px; margin:0;">Operational Integrity Certificate</h1>
-                        <p style="font-family:var(--font-mono); font-size:0.9rem; margin-top:15px; font-weight:900; opacity:0.6;">AUTHENTICATED BY SECURECHECK PRO // RECORDED: ${new Date().toLocaleDateString()}</p>
+                        <p style="font-family:var(--font-mono); font-size:0.9rem; margin-top:15px; font-weight:900; opacity:0.6;">AUTHENTICATED BY SECURECHECK PRO | RECORDED: ${new Date().toLocaleDateString()}</p>
                     </div>
 
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; margin-bottom:5rem;">
@@ -668,7 +668,7 @@
                 <div class="dossier-header">
                     <div style="text-align:left;">
                         <h1 style="font-family:'Syne'; font-size:2.5rem; font-weight:950; letter-spacing:-2px; margin:0; line-height:1;">SecureCheck <span style="color:var(--accent);">Pro</span></h1>
-                        <p style="font-family:'DM Mono'; font-size:0.6rem; text-transform:uppercase; letter-spacing:3px; margin-top:8px; font-weight:900; opacity:0.6;">Formal Heuristic Audit Intelligence</p>
+                        <p style="font-family:'DM Mono'; font-size:0.6rem; text-transform:uppercase; letter-spacing:3px; margin-top:8px; font-weight:900; opacity:0.6;">Formal Heuristic Audit Intelligence | v3.5.0</p>
                     </div>
                     <div style="text-align:right;">
                         <span class="dossier-label">Audit ID</span>
@@ -769,7 +769,7 @@
 
                 <div class="dossier-legal">
                     <p>SecureCheck Pro is an advisory forensic environment. This report provides high-fidelity heuristic indicators based on localized intelligence models. All data processed in this audit remains 100% autonomous within the client environment. No data exfiltration was performed during this session.</p>
-                    <p style="margin-top:1rem; font-weight:950;">© 2026 SECURECHECK PRO // AUDIT CONFIDENTIAL</p>
+                    <p style="margin-top:1rem; font-weight:950;">© 2026 SECURECHECK PRO | AUDIT CONFIDENTIAL</p>
                 </div>
             `;
         },
