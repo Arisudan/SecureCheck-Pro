@@ -1,0 +1,22 @@
+# --- Operational Metadata Isolation ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- System & Environment ---
+.env
+.env.local
+.vscode/
+.idea/
+*.log
+/tmp/
+
+# --- Build & Runtime (Future-Proofing) ---
+node_modules/
+dist/
+build/
+.cache/
+
+# --- Project-Specific ---
+*.pdf
+/forensic-exports/
