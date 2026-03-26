@@ -376,12 +376,71 @@
     };
 
     // --- Core Logic ---
+    // --- Tactical HUD Tooltip Manager ---
+    const HUD = {
+        tip: null,
+        init() {
+            this.tip = document.createElement('div');
+            this.tip.className = 'tactical-tooltip';
+            document.body.appendChild(this.tip);
+
+            document.addEventListener('mouseover', e => {
+                const target = e.target.closest('[data-tooltip]');
+                if (target) {
+                    const content = target.getAttribute('data-tooltip');
+                    const title = target.getAttribute('data-tooltip-title') || 'TACTICAL_DATA';
+                    
+                    this.tip.innerHTML = `
+                        <div class="tooltip-header">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="4"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                            <span>${title}</span>
+                        </div>
+                        <div>${content}</div>
+                    `;
+                    
+                    this.tip.classList.add('active');
+                }
+            });
+
+            document.addEventListener('mousemove', e => {
+                if (this.tip && this.tip.classList.contains('active')) {
+                    const x = e.clientX + 20;
+                    const y = e.clientY + 20;
+                    
+                    // Boundary check
+                    const tipRect = this.tip.getBoundingClientRect();
+                    let finalX = x;
+                    let finalY = y;
+
+                    if (x + tipRect.width > window.innerWidth) {
+                        finalX = e.clientX - tipRect.width - 20;
+                    }
+
+                    if (y + tipRect.height > window.innerHeight) {
+                        finalY = e.clientY - tipRect.height - 20;
+                    }
+
+                    this.tip.style.left = `${finalX}px`;
+                    this.tip.style.top = `${finalY}px`;
+                }
+            });
+
+            document.addEventListener('mouseout', e => {
+                const target = e.target.closest('[data-tooltip]');
+                if (target) {
+                    this.tip.classList.remove('active');
+                }
+            });
+        }
+    };
+
     const App = {
         async init() { 
             await DB.init(); 
             if (typeof Theme !== 'undefined') Theme.init();
             if (typeof PWA !== 'undefined') PWA.init();
             if (typeof Magnetic !== 'undefined') Magnetic.init();
+            HUD.init();
             this.handleDeepLinks(); 
             this.bind(); 
             this.updateCounter(); 

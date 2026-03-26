@@ -108,7 +108,7 @@ body {
 .app-nav {
     display: flex; gap: 8px; background: var(--surface-2); 
     padding: 8px; border-radius: 40px; border: 1px solid var(--border);
-    width: fit-content; margin-bottom: 4rem;
+    width: fit-content; margin: 0 auto 4rem;
 }
 .nav-tab {
     padding: 12px 32px; border-radius: 30px; border: none; background: transparent;
@@ -789,4 +789,53 @@ html.light-mode .switch-bullet { transform: translateX(32px); background: #000; 
     color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+/* --- Tactical HUD Tooltips --- */
+.tactical-tooltip {
+    position: fixed;
+    z-index: 10000;
+    padding: 1rem 1.5rem;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1.5px solid var(--accent);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(59, 130, 246, 0.1);
+    backdrop-filter: blur(15px);
+    border-radius: 14px;
+    color: #fff;
+    font-size: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    max-width: 280px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    line-height: 1.6;
+    font-weight: 500;
+}
+
+.tactical-tooltip.active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.tactical-tooltip .tooltip-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 6px;
+}
+
+.tactical-tooltip .tooltip-header span {
+    font-weight: 950;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--accent);
+    font-size: 0.65rem;
+}
+
+[data-tooltip] {
+    cursor: help;
+    text-decoration: underline dotted var(--accent);
+    text-underline-offset: 4px;
 }
