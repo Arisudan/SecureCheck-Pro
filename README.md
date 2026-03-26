@@ -1,55 +1,67 @@
 # 🛡️ SecureCheck Pro v3.5.0
-### **High-Fidelity Heuristic Audit Intelligence // Operational Autonomy**
+### **High-Fidelity Website Security Analyzer // Operational Autonomy**
 
-**SecureCheck Pro** is an elite, client-side forensic suite designed for security professionals who demand technical accuracy and boutique aesthetics. Engineered for high-stakes intelligence analysis, it prioritizes total data autonomy through a localized security model where no data ever leaves the browser's sandbox.
-
----
-
-## 💎 Boutique Intelligence Philosophy
-
-Unlike common scanners, SecureCheck Pro is built on the principle of **Technical Truth**. It utilizes advanced heuristic models to detect vulnerabilities visible at the browser level—performing deep analysis on URL encodings, script integrity (SRI), and forensic vectors without exfiltrating sensitive payloads.
-
-### **Core Tenets:**
-- **Local-First Execution**: 100% of processing occurs within the browser isolated VM.
-- **Forensic Fidelity**: High-contrast, studio-grade UI designed for operational clarity.
-- **Total Autonomy**: Offline capability via PWA integration for air-gapped security environments.
-- **Dossier Export**: Generates professional, multi-section forensic reports authenticated by the SecureCheck engine.
+**SecureCheck Pro** is an elite, client-side digital forensic suite designed to identify vulnerabilities and security anomalies in real-time. Engineered for high-stakes intelligence analysis, it transforms security auditing into a boutique, tactical experience, prioritizing **Total Data Autonomy**.
 
 ---
 
-## 🛠️ Tactical Tech-Stack
-
-SecureCheck Pro is a lightweight yet powerful static environment built for maximum portability and speed:
-
-| Component | Technical Specification |
-| :--- | :--- |
-| **Logic Engine** | Vanilla ES6+ Intelligence (No External Frameworks) |
-| **Multithreading** | Web Workers for Non-Blocking Forensic Scanning |
-| **Persistence** | IndexedDB Architecture for Local Audit Retention |
-| **UI Environment** | Liquid CSS Grid with Syne & DM Mono Typography |
-| **Integrity** | SHA-256 SRI Hash Verification |
+## 🔍 Operational Mission: What It Does
+SecureCheck Pro performs deep heuristic analysis on URL buffers and code payloads. It visits and analyzes digital assets exactly as a browser does, detecting:
+- **Injection Vectors**: Identification of potential XSS and SQLi patterns.
+- **Script Integrity**: Verification of Subresource Integrity (SRI) and security headers.
+- **Encoding Anomalies**: Detection of obfuscated scripts and suspicious redirects.
+- **Privacy Leaks**: Analysis of tracking pixels and metadata exfiltration.
 
 ---
 
-## 🚀 Deployment & Installation
+## 💎 Tactical Features (Current Capability)
+- **Local-First Intelligence**: All forensic processing occurs within the browser isolated VM. No data is ever exfiltrated to external servers.
+- **Boutique Forensic UI**: A high-contrast, studio-grade interface designed for operational clarity and "Interactive Intelligence."
+- **3D Flip-Card Briefing**: Comprehensive security education through an interactive, boutique-style knowledge base.
+- **Formal Dossier Export**: Generate and download professional, enterprise-grade PDF audit reports locally.
+- **PWA Architecture**: Full offline functionality for air-gapped security environments.
+- **Vault Intelligence Dashboard**: Real-time data visualizations of audit history and tactical metrics.
 
-### **Native App Mode (PWA)**
-SecureCheck Pro includes a production-ready manifest for native installation on Windows, macOS, and iOS/Android.
-1. Open the application in a modern browser.
-2. Select **"Install SecureCheck Pro"** from the address bar.
-3. Launch directly from your desktop as a native shell with full offline support.
+---
 
-### **GitHub Pages Hosting**
-Designed for instant deployment:
-1. Fork this repository.
-2. Enable **GitHub Pages** from the repository settings.
-3. Access your private security hub via the provided URL.
+## 🗺️ Operational Roadmap (Future Scope)
+The Strategic Lifecycle of SecureCheck Pro is designed for continuous upgradability:
+- **Phase 04: AI Forensic Models**: Integration of local, lightweight LLMs for pattern recognition in obfuscated JavaScript.
+- **Advanced API Interception**: Real-time monitoring of fetch/XHR requests within the forensic sandbox.
+- **Heuristic Pattern Extension**: Community-driven vulnerability signatures for emerging zero-day threats.
+- **Node-Clustering**: Support for cross-device audit synchronization while maintaining encryption keys locally.
+
+---
+
+## 👑 Ownership & Royalties
+**SecureCheck Pro** is the intellectual and creative property of **Arisudan**.
+- **Founding Architect**: Arisudan
+- **Lead Developer**: Arisudan
+- **Royalties & Copyright**: All rights, royalties, and ownership of the SecureCheck Pro brand, its heuristic models, and its boutique design tokens are $100\%$ owned by **Arisudan**.
+- **Authenticity**: Any deployment or distribution of this software must acknowledge the original authorship and ownership of Arisudan.
+
+---
+
+## 🛠️ Setup & Installation
+
+### **Option 1: Native Installation (PWA)**
+Designed to function as a native application on Windows, macOS, and Mobile:
+1. Open the hub in a modern web browser (Chrome, Edge, Safari).
+2. Click the **"Install"** button in the header tray (or address bar).
+3. SecureCheck Pro is now available in your applications menu as a standalone security shell.
+
+### **Option 2: Personal Lab Deployment (GitHub Pages)**
+To host your own private instance of the security hub:
+1. Fork the [SecureCheck Pro Repository](https://github.com/Arisudan/SecureCheck-Pro).
+2. Navigate to **Settings > Pages**.
+3. Select the `main` branch and `/ (root)` folder.
+4. Your private audit environment is now live.
 
 ---
 
 ## 📜 Legal & Licensing
 This project is released under the **MIT License**.
-All branding, heuristics, and architectural patterns are property of the **Founding Architect, Arisudan**.
+*Note: The MIT license applies to the software redistribution; the brand, aesthetic tokens, and specific heuristic logic remain the intellectual property of Arisudan.*
 
-> "In a theatre of unseen threats, absolute autonomy is the only objective shield."
-> — *Arisudan, Founding Architect & Lead Auditor*
+> "In a theatre of unseen threats, absolute autonomy is the only objective shield. SecureCheck Pro wasn't built to find bugs—it was engineered to preserve technical truth."
+> — *Arisudan, Founding Architect*
